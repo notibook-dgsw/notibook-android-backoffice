@@ -1,10 +1,10 @@
 package com.example.backproject.view
 
+import android.app.Activity
 import android.content.Intent
-import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.backproject.databinding.ActivityMainBinding
 import com.example.backproject.vm.MainViewModel
 import com.journeyapps.barcodescanner.ScanContract
@@ -39,7 +39,23 @@ class MainActivity : AppCompatActivity() {
         option.setPrompt("책 뒷면에 있는 바코드를 빨간 줄에 맞게 찍어주세요!")
         option.setBeepEnabled(true)
 
+        val shared = getSharedPreferences("checkFirstAccess", Activity.MODE_PRIVATE)
+        val check = shared.getBoolean("check", false)
+
+        if (!check) {
+            shared.edit().putBoolean("check", true)
+                .apply()
+
+            val tutorialIntent = Intent(this@MainActivity, TutorialActivity::class.java)
+            startActivity(tutorialIntent)
+            finish()
+        }
+
         binding.scan.setOnClickListener { result.launch(option) }
         binding.uploadBtn.setOnClickListener { startActivity(Intent(this,NfcActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) }
+        binding.help.setOnClickListener {
+            startActivity(Intent(this@MainActivity, TutorialActivity::class.java))
+            finish()
+        }
     }
 }

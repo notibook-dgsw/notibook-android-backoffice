@@ -23,7 +23,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
         nfc.value = nfcInit
     }
 
-
     fun nfcSuccess() {
         nfc.value = nfcSuc
     }
@@ -40,5 +39,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
     private fun setIsbn(data : String){
         isbn.value = data
     }
+
 
 }
