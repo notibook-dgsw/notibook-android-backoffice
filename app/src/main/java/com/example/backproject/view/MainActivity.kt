@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         if (result.contents == null) Toast.makeText(this, "스캔에 실패했습니다.", Toast.LENGTH_SHORT).show()
         else {
             Toast.makeText(this, "스캔 성공", Toast.LENGTH_SHORT).show()
-            vm.text.value = "https://server.notibook.kro.kr/books/${result.contents}"
+            vm.saveNfcData(result.contents)
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +40,6 @@ class MainActivity : AppCompatActivity() {
         option.setBeepEnabled(true)
 
         binding.scan.setOnClickListener { result.launch(option) }
-        binding.uploadBtn.setOnClickListener { startActivity(Intent(this,NfcActivity::class.java)) }
+        binding.uploadBtn.setOnClickListener { startActivity(Intent(this,NfcActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)) }
     }
 }

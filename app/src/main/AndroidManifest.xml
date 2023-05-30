@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature android:name="android.hardware.nfc" />
+
     <application
         android:name=".application.MainApplication"
         android:allowBackup="true"
@@ -15,8 +19,21 @@
         android:theme="@style/Theme.BackProject"
         tools:targetApi="31">
         <activity
-            android:name=".view.NfcActivity"
+            android:name=".view.TutorialActivity"
             android:exported="false" />
+        <activity
+            android:name=".view.NfcActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="www.example.backproject"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".view.MainActivity"
             android:exported="true">
