@@ -31,6 +31,8 @@ class NfcActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+
         binding.vm = vm
         binding.lifecycleOwner = this
 
