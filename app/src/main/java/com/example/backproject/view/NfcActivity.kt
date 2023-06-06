@@ -60,6 +60,7 @@ class NfcActivity : AppCompatActivity() {
                         Log.e("enter", "cannot size exception")
                     }
                     ndef.writeNdefMessage(message)
+                    vm.saveUrlToServer()
                     vm.nfcSuccess()
                 }
             } catch (e: Exception) {
@@ -79,47 +80,5 @@ class NfcActivity : AppCompatActivity() {
         super.onStop()
         nfcAdapter.disableReaderMode(this);
         vm.nfcInitialize()
-    }
-
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        if ( intent == null ) return
-
-
-        val tag : Tag? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Log.e("tag", intent.action.toString())
-            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
-        } else {
-            @Suppress("DEPRECATION") intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-        }
-
-        writeTag(createTagMessage(intent.getStringExtra("value").toString()), tag!!)
-    }
-
-    private fun createTagMessage(msg: String): NdefMessage {
-        return NdefMessage(NdefRecord.createUri(msg))
-    }
-
-    private fun writeTag(message: NdefMessage, tag: Tag) {
-        val size = message.toByteArray().size
-
-        Log.e("enter", "issuc")
-        try {
-            val ndef = Ndef.get(tag)
-            if (ndef != null) {
-                ndef.connect()
-                if (!ndef.isWritable) {
-                    Toast.makeText(applicationContext, "NFC 태그에 작성할 수 없습니다.", Toast.LENGTH_SHORT).show()
-                }
-                if (ndef.maxSize < size) {
-                    Toast.makeText(applicationContext, "NFC 태그의 크기가 너무 큽니다.", Toast.LENGTH_SHORT).show()
-                }
-                Toast.makeText(applicationContext, "NFC 태그에 정상적으로 작성되었습니다.", Toast.LENGTH_SHORT).show()
-                ndef.writeNdefMessage(message)
-            }
-        } catch (e: Exception) {
-            Log.i("writeError", e.message.toString());
-        }
     }
 }
